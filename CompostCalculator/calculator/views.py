@@ -3,12 +3,19 @@ from django.views.generic import CreateView, UpdateView, DetailView
 from calculator.models import CompostItem
 from calculator.forms import CompostItemCreateForm, CompostItemUpdateForm
 
+from registration.backends.simple.views import RegistrationView as BaseRegistrationView
+
 class CompostItemCreate(CreateView):
     template_name = 'calculator/base.html'
     model = CompostItem
     form_class = CompostItemCreateForm
     def create(self, request, *args, **kwargs):
         return HttpResponse(request, {'form': CompostItemCreateForm})
+
+class RegistrationView(BaseRegistrationView):
+    def get_success_url(self, request, user):
+        return "/calculator/"
+
 
 def home(request):
     template_name = 'calculator/base.html'
