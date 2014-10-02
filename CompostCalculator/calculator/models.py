@@ -20,8 +20,3 @@ class Recipe(models.Model):
     title = models.CharField(max_length=256)
     chosen = models.CharField(max_length=1024)
     creator = models.ForeignKey(settings.AUTH_USER_MODEL)
-
-class UserProfile(AbstractUser):
-    """docstring for UserProfile"""
-    def get_absolute_url(user):
-        return "/calculator/"
