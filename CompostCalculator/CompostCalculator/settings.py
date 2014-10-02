@@ -104,8 +104,3 @@ LOGIN_REDIRECT_URL = '/calculator'
 
 LOGOUT_REDIRECT_URL = '/calculator'
 
-# ABSOLUTE_URL_OVERRIDES = {
-#     'auth.user': lambda o: "/user/%s/" % user.id,
-# }
-
-AUTH_USER_MODEL = "calculator.UserProfile"
