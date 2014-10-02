@@ -1,0 +1,15 @@
+{% if user.is_anonymous %}
+    <p>You need to login to view this page.</p>
+    <form action="/accounts/login/" method="get">
+        {% csrf_token %}
+        <p><input type="submit" value="Login" /></p>
+    </form>
+{% else %}
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <br>
+        <p class="visible" style="padding: 8px; text-align: center;">Your profile page!</p>
+        <br>
+    </div>
+    <div class="col-md-5"></div>
+{% endif %}

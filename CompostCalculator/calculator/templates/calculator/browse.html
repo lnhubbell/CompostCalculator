@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="col-md-4"></div>
+<div class="col-md-4 visible">
+{% verbatim %}
+<!--                 <div id="items">
+                  <div ng-repeat="post in posts">
+                    <div class="item picShell">
+                        <p class="picTitle">{{post.title}}</p>
+                        <img class="picImage" src="/static/imgs/{{post.picture}}" alt="Smiley face" height="128" width="128">
+                        <span>Comp {{$index}}</span>
+                    </div>
+                  </div>
+                </div> -->
+
+
+<div id="items" class="row">
+  <div ng-repeat="post in posts">
+    <div class="item" ng-mousedown="onMouseDown($event, post, $index)">
+        <img src="/static/imgs/{{post.picture}}" alt="Smiley face" height="128" width="128">
+        <span>{{post.title}}</span>
+    </div>
+  </div>
+</div>
+
+
+{% endverbatim %}
+
+
+</div>
+<div class="col-md-1"></div>
+<div class="col-md-3">
+<div id="cart">
+    <div class="info">Drag Items Here</div>
+</div>
+</div>
+{% endblock %}
+

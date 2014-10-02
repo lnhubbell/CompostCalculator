@@ -1,0 +1,95 @@
+{% load staticfiles %}
+
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="{% static "bootstrap/dist/css/bootstrap.css" %}">
+        <link rel="stylesheet" type="text/css" href="{% static "css/calc.css" %}">
+        <link rel="stylesheet" type="text/css" href="{% static "css/moo.css" %}">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    </head>
+    <body ng-app="{% block ng_app %}example.app.grid{% endblock %}">
+    
+
+    <div ng-controller="RecipeController">
+      <div ng-controller='EditRecipeController'>
+        <div ng-controller="GridController">
+          <div ng-controller="AppController">
+
+        <div class="row">
+            <header>
+                <nav class="navbar navbar-default" role="navigation">
+                  <div class="my-nav">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                      </button>
+                      <a class="navbar-brand" href="" ng-click="loadURL('/calculator/heap')">Compost Calculator</a>
+                    </div>
+
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                      <ul class="nav navbar-nav">
+                        {% if authorized %}
+                        {% else %}
+                        {% endif %}
+                            <li><a href="" ng-click="loadURL('/calculator/list')">Add Compostable</a></li>
+                      </ul>
+                      <ul class="nav navbar-nav navbar-right">
+                        <!-- <li><a href="#">About</a></li> -->
+                        {% if not user.is_anonymous %}
+                        <li><a href="" ng-click="loadURL('/accounts/profile/')">{{user}}</a></li>
+                        <li> &nbsp;&nbsp;</li>
+                        <li><a href="/calculator/logout/">Logout</a></li>
+                        {% else %}
+                        <li><a href="" ng-click="loadURL('/calculator/login/')">Login</a></li>
+                        {% endif %}
+                      </ul>
+                    </div><!-- /.navbar-collapse -->
+                  </div><!-- /.container-fluid -->
+                </nav>
+            </header><!-- navbar -->
+        </div>
+
+        <div id="userID" style="display: none;">{{user.id}}</div>
+
+
+
+{% verbatim %}
+<div ng-include src="templateURL.url"></div>
+{% endverbatim %}
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+<!--         <div class="content" ng-controller="{% block ng_controller %}AppController{% endblock %}"> -->
+
+
+
+ <!--        </div> -->
+    {% block js %}
+    <script src="{% static "underscore/underscore.js" %}"></script>
+    <script src="{% static "angular/angular.js" %}"></script>
+    <script src="{% static "angular-resource/angular-resource.js" %}"></script>
+    <script src="{% static "js/mootools.js" %}"></script>
+    <script src="{% static "js/mymootools.js" %}"></script>
+    <script src="{% static "js/mootools-more-1.5.1.js" %}"></script>
+    <script src="{% static "js/script.js" %}"></script>
+    <script src="{% static "js/sugar.min.js" %}"></script>
+
+    <script>
+    // Add the CSRF Token
+    var app = angular.module('example.app.editor'); // Not including a list of dependent modules (2nd parameter to `module`) "re-opens" the module for additional configuration
+    app.config(['$httpProvider', function($httpProvider) {
+        $httpProvider.defaults.headers.common['X-CSRFToken'] = '{{ csrf_token|escapejs }}';
+    }]);
+    </script>
+
+    {% endblock %}
+    </body>
+</html>
