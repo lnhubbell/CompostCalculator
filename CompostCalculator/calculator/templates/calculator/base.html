@@ -2,22 +2,40 @@
 
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="{% static "bootstrap/dist/css/bootstrap.css" %}">
+        <title>Compost Calculator</title>
+        <link rel="stylesheet" type="text/css" href="{% static "bootstrap/dist/css/bootstrap.min.css" %}">
         <link rel="stylesheet" type="text/css" href="{% static "css/calc.css" %}">
         <link rel="stylesheet" type="text/css" href="{% static "css/moo.css" %}">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+
+
+        <!-- styles needed by jScrollPane -->
+        <link type="text/css" href="{% static "css/jquery.jscrollpane.css" %}" rel="stylesheet" media="all" />
+
+        <!-- latest jQuery direct from google's CDN -->
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+        </script>
+
+        <!-- the mousewheel plugin - optional to provide mousewheel support -->
+        <script type="text/javascript" src="{% static "js/jquery.mousewheel.js" %}"></script>
+
+        <!-- the jScrollPane script -->
+        <script type="text/javascript" src="{% static "js/jquery.jscrollpane.min.js" %}"></script>
+
+
+
     </head>
-    <body ng-app="{% block ng_app %}example.app.grid{% endblock %}">
+    <body ng-app="{% block ng_app %}mainModule{% endblock %}">
     
 
     <div ng-controller="RecipeController">
-      <div ng-controller='EditRecipeController'>
         <div ng-controller="GridController">
           <div ng-controller="AppController">
 
-        <div class="row">
-            <header>
-                <nav class="navbar navbar-default" role="navigation">
+        <div class="row my-nav">
+            <header class="my-nav">
+                <nav class="navbar navbar-default my-nav" role="navigation">
                   <div class="my-nav">
                     <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header">
@@ -27,25 +45,32 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                       </button>
-                      <a class="navbar-brand" href="" ng-click="loadURL('/calculator/heap')">Compost Calculator</a>
+                      {% block linkHome %}
+                      <p class="navbar-brand navbar-btn"><span class="number">30:1</span> <span class="title">Compost Calculator</span></p>
+                      {% endblock %}
                     </div>
 
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                      <ul class="nav navbar-nav">
+<!--                       <ul class="nav navbar-nav">
                         {% if authorized %}
                         {% else %}
                         {% endif %}
+                        {% block linkList %}
                             <li><a href="" ng-click="loadURL('/calculator/list')">Add Compostable</a></li>
-                      </ul>
+                        {% endblock %}
+                      </ul> -->
                       <ul class="nav navbar-nav navbar-right">
                         <!-- <li><a href="#">About</a></li> -->
                         {% if not user.is_anonymous %}
-                        <li><a href="" ng-click="loadURL('/accounts/profile/')">{{user}}</a></li>
+                        {% block linkProfile %}
+<!--                         <li><a href="" ng-click="loadURL('/accounts/profile/')">{{user}}</a></li> -->
+                        <li><a class="navbar-btn">{{user}}</a></li>
+                        {% endblock %}
                         <li> &nbsp;&nbsp;</li>
-                        <li><a href="/calculator/logout/">Logout</a></li>
+                        <li><a class="navbar-btn logoutBTN" href="/calculator/logout/">Logout</a></li>
                         {% else %}
-                        <li><a href="/calculator/login/">Login</a></li>
+                        <li><a class='navbar-btn loginBTN' href="/calculator/login/">Login</a></li>
                         {% endif %}
                       </ul>
                     </div><!-- /.navbar-collapse -->
@@ -57,14 +82,14 @@
         <div id="userID" style="display: none;">{{user.id}}</div>
 
 
-
+{% block main %}
 {% verbatim %}
 <div ng-include src="templateURL.url"></div>
 {% endverbatim %}
+{% endblock %}
 
           </div>
         </div>
-      </div>
     </div>
 
 <!--         <div class="content" ng-controller="{% block ng_controller %}AppController{% endblock %}"> -->
@@ -73,6 +98,7 @@
 
  <!--        </div> -->
     {% block js %}
+<!--     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
     <script src="{% static "underscore/underscore.js" %}"></script>
     <script src="{% static "angular/angular.js" %}"></script>
     <script src="{% static "angular-resource/angular-resource.js" %}"></script>
@@ -80,16 +106,22 @@
     <script src="{% static "js/mymootools.js" %}"></script>
     <script src="{% static "js/mootools-more-1.5.1.js" %}"></script>
     <script src="{% static "js/script.js" %}"></script>
+    <script src="{% static "js/comment.js" %}"></script>
     <script src="{% static "js/sugar.min.js" %}"></script>
+    <script src="{% static "js/bootstrap.min.js" %}"></script>
+    <script src="{% static "js/ui-bootstrap-tpls-0.9.0.min.js" %}"></script>
+
+
 
     <script>
     // Add the CSRF Token
-    var app = angular.module('example.app.editor'); // Not including a list of dependent modules (2nd parameter to `module`) "re-opens" the module for additional configuration
+    var app = angular.module('mainModule'); // Not including a list of dependent modules (2nd parameter to `module`) "re-opens" the module for additional configuration
     app.config(['$httpProvider', function($httpProvider) {
         $httpProvider.defaults.headers.common['X-CSRFToken'] = '{{ csrf_token|escapejs }}';
     }]);
     </script>
 
     {% endblock %}
+
     </body>
 </html>

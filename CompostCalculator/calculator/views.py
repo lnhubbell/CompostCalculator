@@ -29,6 +29,10 @@ def list(request):
     template_name = 'calculator/list.html'
     return render(request, template_name)
 
+def modal(request):
+    template_name = 'calculator/modal.html'
+    return render(request, template_name)
+
 def heap(request):
     template_name = 'calculator/heap.html'
     return render(request, template_name, {'user':request.user})

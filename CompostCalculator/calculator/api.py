@@ -51,3 +51,12 @@ class UserDetail(generics.RetrieveAPIView):
     permission_classes = [
         permissions.AllowAny
     ]
+
+
+class UserDestroy(generics.DestroyAPIView):
+    model = User
+    lookup_field = 'username'
+    serializer_class = UserSerializer
+    permission_classes = [
+        permissions.AllowAny
+    ]

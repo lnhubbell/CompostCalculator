@@ -1,166 +1,247 @@
 {% verbatim %}
 
-
+<!-- <div ng-app="comment">
+argh
+  <form></form>
+</div>
+ -->
 <div class="container-fluid">
-  <div class="row">
+  <div class="row zeroed">
     <div ng-controller="RecipeController">
-      <div ng-controller='EditRecipeController'>
         <div ng-controller="GridController">
-          <div class="col-md-1"></div>
-          <div class="visible left col-md-5">
-            <div class="row">
+          <div class="col-md-7 zeroed">
+            <div id="howTo" class="visible row zeroed">
               <div class="col-md-12">
-                <h3>The Calculator</h3>
-                <div id="calcClear" ng-if="chosen != 0" ng-click="clear()">(clear)</div>
-
+                <button class="btn btn-default hideMe" ng-click="hideHow()">Hide</button>
+                <h3>How To</h3>
+                <ol>
+                  <li>Click on some of the compostable items in the box on the right.</li>
+                  <li>Fill in the volume boxes, with the amounts you have.</li>
+                  <li>Check the box for the suggested compostables, choose a final compostable, and watch the magic!</li>
+                  <li>Play with the Compost Calculator until you achieve a ratio of 30:1!</li>
+                </ol>
+                <br>
               </div>
             </div>
-            <div class="row">
-              <div class='col-md-12'>
-                <table style="width:100%">
-                  <tr>
-                    <th class="firstCol">Compostable</th>
-                    <th class="secondCol">C</th>
-                    <th>N</th>
-                    <th>Vol</th>
-                    <th>&nbsp;</th>
-                  </tr>
-                  <tr ng-repeat="choice in chosen track by $index">
-                    <td class="firstCol">{{choice.title}}</td>
-                    <td class="secondCol">{{choice.carbon}}</td>
-                    <td>{{choice.nitrogen}}</td>
-                    <td><input type="number" id="{{$index}}Vol" ng-change="calculateTotals(false)" ng-model="choice.vol"></td>
-                    <td><p ng-click="delete(choice)">(delete)</p></td>
-                  </tr>
-                  <tr>
-                    <td id="blankLine">&nbsp;</td>
-                  </tr>
-                  <tr>
-                    <td class="firstCol">Totals</td>
-                    <td class="secondCol"><input type="number" id="totalCarbon" readonly></td>
-                    <td><input type="number" ng-model="totalNitrogen" id="totalNitrogen" readonly></td>
-                    <td><input type="number" id="totalVol" readonly></td>
-                  </tr>
-                </table>
-                <p id="finalRatio">Final Ratio (C:N)&nbsp;&nbsp;&nbsp;<text id="ratio">1</text>:1</p>
-                <div>
-                  <h3>Suggestions:</h3>
-                  <p>To achieve a proper ratio you should add <text id="suggestion"></text> compostables.</p>
-                  <div id="carbonMaterials">
-                    <h4>Carbon Rich Materials</h4>
-                    <ul ng-repeat="post in posts | filter:carbonRich()">
-                      <li ng-click="finishWith(post)">{{post.title}}</li>
-                    </ul>
-                  </div>
 
-                  <div id="nitrogenMaterials">
-                    <h4>Nitrogen Rich Materials</h4>
-                    <ul ng-repeat="post in posts | filter:nitrogenRich()">
-                      <li ng-click="finishWith(post)">{{post.title}}</li>
-                    </ul>
+            <div class="row visible zeroed">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-12">
+                    <button id="showHow" class="btn btn-default showMe" ng-click="showHow()">How To</button>
+                    <h3 id="calcTitle">The Calculator</h3>
+                    <br>
+                      <!--                 <div class="hoverClick glyphicon glyphicon-remove-circle" id="calcClear" ng-if="chosen != 0" ng-click="clear()"></div> -->
+
                   </div>
-                  {% endverbatim %}
-                  {% if not user.is_anonymous %}
-                  <h3>Save it for later!</h3>
-                  <form class="form-inline">
-                      <div class="form-group block-level">
-                          <input type="text" class="form-control" ng-model="newRecipe.title" placeholder="Title">
+                </div>
+                <div class="row">
+                  <div class='col-md-12 tableBox'>
+                    <table class="mainTable" style="width:100%">
+                      <tr>
+                        <th class="firstCol"><span class="full">Compostable</span><span class="reduced">Comp.</span></th>
+                        <th class="secondCol"><span class="full">Carbon to Nitrogen</span><span class="reduced">C:N</span></th>
+                        <!--                   <th><span class="full">Nitrogen</span><span class="reduced">N</span></th> -->
+                        <th><span class="full">Volume</span><span class="reduced">Vol</span></th>
+                        <th class="finalCol"></th>
+                      </tr>
+                      <tr ng-repeat="choice in chosen track by $index">
+
+                        <td class="firstCol">{{choice.title}}</td>
+                        <td class="secondCol">{{choice.carbon}}:{{choice.nitrogen}}</td>
+                        <td><input min="0" class="volInput" type="number" id="{{$index}}Vol" ng-change="calculateTotals(false)" ng-model="choice.vol"></td>
+                        <td><p id="deleteBtn{{$index}}" class="glyphicon glyphicon-remove hoverClick deleteBtn" ng-click="delete(choice)">&nbsp;</p></td>
+                      </tr>
+                      <tr>
+                        <td id="blankLine">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td class="firstCol">Totals</td>
+                        <td><span id="totalCarbon"></span>:<span id="totalNitrogen"></span></td>
+                        <td style="width: 50px;"><div style="width:50px;"><p style="float: right; margin-bottom:0; margin-right: 15px;" id="totalVol"></p></div></td>
+                      </tr>
+                      <tr>
+                        <td id="blankLine">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td class="firstCol">Final Ratio</td>
+                        <td><text id="ratio">1</text>:1</td>
+                      </tr>
+                    </table>
+                    <!--            <br>
+                    <p id="finalRatio">Final Ratio (C:N)&nbsp;&nbsp;&nbsp;<text id="ratio">1</text>:1</p> -->
+                    <div>
+                      <h3>Suggestions:</h3>
+                      <p>To achieve a proper ratio you should add <text id="suggestion"></text> compostables.</p>
+                      <!-- <div id="carbonMaterials">
+                        <h4>Carbon Rich Materials</h4>
+                        <ul ng-repeat="post in posts.compostables | mineOrSuggest:currentUser | carbonRich">
+                          <li><a ng-click="finishWith(post)" href=''>{{post.title}}</a></li>
+                        </ul>
                       </div>
-                      <div class="form-group">
-                          <input id="chosenJSON" type="text" class="form-control" ng-model="newRecipe.chosen" style="display: none;">
-                      </div>
-                      <div class="form-group">
-                          <input id="hacks" type="number" class="form-control" ng-model="newRecipe.creator" style="display: none;">
-                      </div>
-                      <div class="form-group">
-                          <button class="btn btn-default" ng-click="save()">Save Heap</button>
-                      </div>
-                  </form>
-                  {% else %}
-                  <h4><a href="" ng-click="loadURL('/calculator/login/')">Login</a> to save your heap.</h4>
-                  {% endif %}
-                  {% verbatim %}
+
+                      <div id="nitrogenMaterials">
+                        <h4>Nitrogen Rich Materials</h4>
+                        <ul ng-repeat="post in posts.compostables | mineOrSuggest:currentUser | nitrogenRich">
+                          <li><a id="nitroSuggest{{$index}}" ng-click="finishWith(post)" href=''>{{post.title}}</a></li>
+                        </ul>
+                      </div> -->
+                      {% endverbatim %}
+                      {% if not user.is_anonymous %}
+                      <h3>Save it for later!</h3>
+                      <form class="form-inline">
+                          <div class="form-group block-level">
+                              <input type="text" class="square form-control" ng-model="newRecipe.title" placeholder="Title">
+                          </div>
+                          <div class="form-group">
+                              <button class="btn btn-default" ng-click="saveRecipe()">Save Heap</button>
+                          </div>
+                      </form>
+                      {% else %}
+                      <br>
+                      <h4><a href="/calculator/login">Login</a> to save your heap.</h4>
+                      {% endif %}
+                      {% verbatim %}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="right col-md-5">
-            <div class="visible fix">
-              <div class="row">
-                <div class="col-md-3">
-                  <h3>Compostables</h3>
+
+          <div class="col-md-5 zeroed">
+            <div class="row zeroed">
+              <div class="col-md-12 visible">
+                <div class="row zeroed subTitle">
+                  <div class="zeroed col-xs-2">
+                    <h3 class="full">Compostables</h3><h3 class="reduced">Comps.</h3>
+                  </div>
+                  <div class="search col-xs-10 form-horizontal" role="form" id="recipeSearchBar">
+                    <div class="form-group">
+                      <label for="inputSearch" class="col-xs-2 col-xs-offset-3 col-sm-offset-4 control-label">Search</label>
+                      <div class="col-xs-7 col-sm-6 pull-right">
+                        <input id="inputSearch" class="form-control" ng-model="query" />
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div class="col-md-8" id="searchBar">
-                  Search: <input ng-model="query">
+                <div class="row">
+                  <div ng-controller="ModalDemoCtrl">
+                    <p id="add_test_hook" ng-click="openModal()" class="hoverClick col-xs-12">&nbsp;&nbsp;Add Compostable</p>
+                  </div>
                 </div>
-              </div>
-              <div class="row">
-                <div class="col-md-6">
-                  <h4>Carbon Rich:</h4>
-                  <ul class="compostables">
-                    <li ng-repeat="post in posts | filter:carbonRich() | filter:query">
-                      <a href='' ng-mouseover="showPic(post.picture)" ng-click="addChosen(post)">{{post.title}}</a>
-                    </li>
-                  </ul>
+                <div class="row">
+                  <div id="suggestCarbon" class="col-xs-6">
+                    <h4>Carbon Rich:<input id="suggestCarbonBox" class="checkboxCarbon" type="checkbox"/></h4>
+                  </div>
+                  <div id="suggestNitrogen" class="col-xs-6">
+                    <h4>Nitrogren Rich:<input id="suggestNitrogenBox" class="checkboxNitrogen" type="checkbox"/></h4>
+                  </div>
                 </div>
-                <div class="col-md-6">
-                  <h4>Nitrogren Rich:</h4>
-                  <ul class="compostables">
-                    <li ng-repeat="post in posts | filter:nitrogenRich() | filter:query">
-                      <a href='' ng-mouseover="showPic(post.picture)" ng-click="addChosen(post)">{{post.title}}</a>
-                    </li>
-                  </ul>
+                <div class="row scroll">
+                  <div class="col-xs-6">
+                    <ul class="compostables">
+                      <li ng-repeat="post in posts.compostables | mineOrSuggest:currentUser | carbonRich | filter:query">
+                        <span class="hoverClick" id="carbon{{$index}}" ng-click="addChosen(post,'suggestCarbonBox')" popover="{{post.description}}" popover-trigger="mouseenter" popover-placement="right"  popover-append-to-body="true" popover-popup-delay="500">{{post.title}}</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-xs-6 nitrogenList">
+                    <ul class="compostables">
+                      <li ng-repeat="post in posts.compostables | mineOrSuggest:currentUser | nitrogenRich | filter:query">
+                        <span class="hoverClick" id="nitrogen{{$index}}" ng-click="addChosen(post,'suggestNitrogenBox')"popover="{{post.description}}" popover-trigger="mouseenter" popover-placement="right" popover-append-to-body="true" popover-popup-delay="500">{{post.title}}</a>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="visible fix">
-              <div class="row">
-                <div class="col-md-3">
-                  <h3>Recipes</h3>
+            <div class="row zeroed">
+              <div class="col-md-12 visible">
+                <div class="row zeroed">
+                  <div class="zeroed col-xs-2">
+                    <h3>Heaps</h3>
+                  </div>
+                  
+                  <div class="search col-xs-10 form-horizontal" role="form" id="recipeSearchBar">
+                    <div class="form-group">
+                      <label for="inputSearch" class="col-xs-2 col-xs-offset-3 col-sm-offset-4 control-label">Search</label>
+                      <div class="col-xs-7 col-sm-6 pull-right">
+                        <input id="inputSearch" class="form-control" ng-model="recipeQuery" />
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
-                <div class="col-md-8" id="recipeSearchBar">
-                  Search: <input ng-model="recipeQuery">
+                <div class="row" id="myRecipes">
+                  <div class="col-xs-6">
+                    <h4>My Heaps:</h4>
+                  </div>
+                  <div class="col-xs-6">
+                    <h4>All Heaps:</h4>
+                  </div>
                 </div>
-              </div>
-              <div class="row" id="myRecipes">
-                <div class="col-md-6">
-                  <h4>My Recipes:</h4>
-                </div>
-                <div class="col-md-6">
-                  <h4>All Recipes:</h4>
-                </div>
-              </div>
-              <div class="row scroll">
-                <div class="col-md-6">
-                  <ul class="compostables">
-                    <li ng-repeat="recipe in recipes | filter:myRecipes() | filter:recipeQuery">
-                      <a href='' ng-click="loadRecipe(recipe)">{{recipe.title}}</a>
-                    </li>
-                  </ul>
-                </div>
-                <div class="col-md-6">
-                  <ul class="compostables">
-                    <li ng-repeat="recipe in recipes | filter:recipeQuery">
-                      <a href='' ng-click="loadRecipe(recipe)">{{recipe.creator}}</a>
-                    </li>
-                  </ul>
+                <div class="row scroll">
+                  <div class="col-xs-6">
+                    <ul class="compostables">
+                      <li ng-repeat="recipe in recipes | filter:myRecipes() | filter:recipeQuery">
+                        <a href='' ng-click="loadRecipe(recipe)">{{recipe.title}}</a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-xs-6">
+                    <ul class="compostables">
+                      <li ng-repeat="recipe in recipes | filter:recipeQuery">
+                        <a href='' ng-click="loadRecipe(recipe)">{{recipe.title}}</a>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+
+
           <div class="col-md-1"></div>
         </div>
-      </div>
     </div>
   </div>
 </div>
+
+<script>
+      // $(function()
+      // {
+      //   $('.scroll-pane').jScrollPane();
+      // });
+</script>
+
+
 {% endverbatim %}
+
 
 
 <script>
 // Add the CSRF Token
-var app = angular.module('example.app.grid'); // Not including a list of dependent modules (2nd parameter to `module`) "re-opens" the module for additional configuration
+var app = angular.module('mainModule'); // Not including a list of dependent modules (2nd parameter to `module`) "re-opens" the module for additional configuration
 app.config(['$httpProvider', function($httpProvider) {
     $httpProvider.defaults.headers.common['X-CSRFToken'] = '{{ csrf_token|escapejs }}';
 }]);
+
+
+</script>
+
+<script type='text/javascript'>
+   $(document).ready(function () {
+   if ($("[rel=tooltip]").length) {
+    // alert("tooltip");
+   $("[rel=tooltip]").tooltip();
+   }
+ });
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    var x = 10;
+    $(".scroll-pane").jScrollPane();
+  });
 </script>

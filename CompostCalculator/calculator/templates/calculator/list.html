@@ -1,59 +1,73 @@
 {% verbatim %}
-    <h1>{{posts.length}} Compostables</h1>
+    <div id="Add_compostable_page"></div>
+    <h1 class="compTitle"><a href="" ng-click="loadURL('/calculator/heap')">COMPOST CALCULATOR</a></h1>
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6">
-            <div ng-controller="EditCompostController">
+            <div ng-controller="GridController">
                 <form class="form-horizontal">
-                    <div class="panel">
+                    <div class="visible">
                         <div class="panel-heading clearfix" id="compSaveField">
-                            <div class="form-group block-level">
-                                <input type="text" class="form-control" ng-model="newCompostable.title" placeholder="Title" style="margin: 15px;">
+                            <div class="form-group" style="margin-top:15px;">
+                                <label for="inputTitle" class="col-sm-2 control-label">Title:</label>
+                                <div class="col-sm-4">
+                                    <input id="inputTitle" type="text" class="form-control" ng-model="newCompostable.title" placeholder="Title">
+                                </div>
                             </div>
-                            <div class="well" id="theWell">
+                            <div  id="theWell">
                                 <div class="form-group">
-                                    <label for="inputCarbon" class="col-md-2 control-label">Carbon:</label>
-                                    <div class="col-md-4">
+                                    <label for="inputCarbon" class="col-sm-2 control-label">Carbon:</label>
+                                    <div class="col-sm-6">
                                         <input id="inputCarbon" type="number" class="form-control" ng-model="newCompostable.carbon">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputNitro" class="col-md-2 control-label">Nitrogen:</label>
-                                    <div class="col-md-4">
+                                    <label for="inputNitro" class="col-sm-2 control-label">Nitrogen:</label>
+                                    <div class="col-sm-6">
                                         <input id="inputNitro" type="number" class="form-control" ng-model="newCompostable.nitrogen">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputDesc" class="col-md-2 control-label">Description:</label>
-                                    <div class="col-md-4">
+                                    <label for="inputDesc" class="col-sm-2 col-sm-2 control-label">Description:</label>
+                                    <div class="col-sm-6">
                                         <input id="inputDesc" type="text" class="form-control" ng-model="newCompostable.description">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <button id="compSaveBtn" class="btn btn-default" ng-click="save()">Save Compostable</button>
+                                    <button id="compSaveBtn" class="btn btn-default" ng-click="saveCompostable()">Save Compostable</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </form>
             </div>
-
-            <div ng-controller="EditCompostController">
-                <div class="panel" ng-repeat="post in posts | reverse">
-                    <div class="panel-heading clearfix">
-                        <h3 class="panel-title">{{ post.title }}</h3>
-                        <p class="well">
-                        Carbon: {{ post.carbon }}<br>
-                        Nitrogen: {{ post.nitrogen }} <br>
-                        Description: {{post.description}}
-                        </p>
-
-                    </div>
-                </div>
-            </div>
-
-
         </div>
         <div class="col-md-3"></div>
     </div>
 {% endverbatim %}
+
+  <!--           <div ng-controller="GridController">
+
+
+
+
+
+
+
+                <table style="width:100%">
+                  <tr>
+                    <th class="smallCol">Compostable</th>
+                    <th class="smallCol">Carbon</th>
+                    <th class="smallCol">Nitrogen</th>
+                    <th>Description</th>
+                  </tr>
+                  <tr ng-repeat="post in posts | reverse">
+                    <td class="firstCol">{{post.title}}</td>
+                    <td>{{post.carbon}}</td>
+                    <td>{{post.nitrogen}}</td>
+                    <td>{{post.description}}</td>
+                  </tr>
+                </table>
+
+            </div>
+ -->

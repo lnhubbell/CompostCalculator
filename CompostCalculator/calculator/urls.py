@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 from api import CompostItemDetail, CompostItemList
-from api import RecipeDetail, RecipeList, UserDetail, UserList
+from api import RecipeDetail, RecipeList, UserDetail, UserList, UserDestroy
 from django.contrib.auth import views as auth_views
 
 item_urls = patterns('',
@@ -17,7 +17,8 @@ recipe_urls = patterns('',
 user_urls = patterns('',
     url(r'^/(?P<pk>\d+)$', UserDetail.as_view(), name='user-detail'),
     url(r'^$',UserList.as_view(), name='user-list'),
-
+    # url(r'^/destroy/(?P<pk>\d+)$', UserDestroy.as_view(), name='user-destroy'),
+    url(r'^/destroy/(?P<username>.+)/$', UserDestroy.as_view(), name='user-destroy'),
 )
 
 
@@ -25,6 +26,7 @@ urlpatterns = patterns('',
     url(r'^$', 'calculator.views.home', name='home'),
     url(r'new', 'calculator.views.create', name='create'),
     url(r'list', 'calculator.views.list', name='list'),
+    url(r'modal', 'calculator.views.modal', name='modal'),
     url(r'heap', 'calculator.views.heap', name='heap'),
     url(r'browse', 'calculator.views.browse', name='browse'),
     url(r'testInLay', 'calculator.views.testInLay', name='testInLay'),

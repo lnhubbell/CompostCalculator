@@ -1,9 +1,20 @@
+{% extends "base.html" %}
+
+{% block linkHome %}
+    <a class="navbar-brand" href="/calculator"><span class="number">30:1</span><span class="title">Compost Calculator</span></a>
+{% endblock %}
+
+{% block linkList %}
+{% endblock %}
+
+
+{% block main %}
 {% if form.errors %}
 <p>Your username and password didn't match. Please try again.</p>
 {% endif %}
 
 <div class="col-md-4"></div>
-<div class="col-md-4 visible" style="padding: 8px;">
+<div class="col-md-4 visible" style="padding: 16px 0 4px 16px;">
     <div class="row">
         <div class='col-xs-6'>
             <form method="post" action="/calculator/login/">
@@ -18,7 +29,7 @@
                         <td>{{ form.password }}</td>
                     </tr>
                 </table>
-                <button type="submit" class="btn btn-default btn-lg my-btn" style="margin-top: 15px;">
+                <button id="submit" type="submit" class="btn btn-default btn-lg my-btn" style="margin-top: 15px;">
                     Login &nbsp;&nbsp;<span class="glyphicon glyphicon-user"></span>
                 </button>
             </form>
@@ -26,7 +37,7 @@
         <div class='col-xs-6'>
             <form action="/accounts/register/" method="GET">
                 {% csrf_token %}
-                <button ] type="submit" class="btn btn-default btn-lg" style="margin-top: 66px;">
+                <button id="register" type="submit" class="btn btn-default btn-lg" style="margin-top: 66px;">
                     Register &nbsp;&nbsp;<span class="glyphicon glyphicon-pencil"></span>
                 </button>
             </form>
@@ -34,3 +45,4 @@
     </div>
 </div>
 <div class="col-md-4"></div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% verbatim %}
+<form class="form-horizontal">
+    <div class="panel-heading clearfix">
+        <div class="form-group" style="margin-top:15px;">
+            <label for="inputFirstName" class="col-xs-2 control-label">First Name:</label>
+            <div class="col-xs-6">
+                <input id="inputFirstName" type="text" class="form-control" ng-model="newComment.firstName" placeholder="First Name">
+            </div>
+        </div>
+        <div  id="theWell">
+            <div class="form-group">
+                <label for="inputLastName" class="col-xs-2 control-label">Last Name:</label>
+                <div class="col-xs-6">
+                    <input id="inputLastName" type="number" class="form-control" ng-model="newComment.lastName" placeholder="Last Name">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputEmail" class="col-sm-2 control-label">Email:</label>
+                <div class="col-sm-6">
+                    <input id="inputEmail" type="number" class="form-control" ng-model="newComment.email">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputComment" class="col-sm-2 col-sm-2 control-label">Description:</label>
+                <div class="col-sm-6">
+                    <input id="inputComment" type="text" class="form-control" ng-model="newComment.comment">
+                </div>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-default" ng-click="submitComment()">Submit Comment</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+</div>
+
+{% endverbatim %}
+
