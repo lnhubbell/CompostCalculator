@@ -83,15 +83,30 @@ app.filter('mineOrSuggest', function() {
   };
 });
 
+
+app.factory('Compostable', [
+  '$resource', function($resource) {
+    return $resource('/calculator/items/:id', {
+      id: '@id'
+    });
+  }
+]);
+
+
+
+
 app.controller('GridController', [
   '$scope', 'Recipe', 'Compostable', function($scope, Recipe, Compostable) {
-  // $scope.posts = {};
-  // $scope.posts['compostables'] = [];
   $scope.chosen = [];
-  $scope.totalVol = 0;
   $scope.totalWeight = 0;
   $scope.newRecipe = new Recipe();
   $scope.newCompostable = new Compostable();
+  $scope.total = {};
+  $scope.total.vol = null;
+  $scope.total.carbon = null;
+  $scope.total.nitrogen = null;
+  $scope.total.finalRatio = 1;
+  $scope.total.suggestion = null;
 
   $scope.saveCompostable = function() {
     $scope.newCompostable.creator = $scope.currentUser();
@@ -158,9 +173,9 @@ app.controller('GridController', [
   }
 
   $scope.finishWith = function(post) {
-    tot = totalVol.innerHTML;
-    carb = totalCarbon.innerHTML;
-    nitro = totalNitrogen.innerHTML;
+    tot = $scope.total.vol;
+    carb = $scope.total.carbon;
+    nitro = $scope.total.nitrogen;
     numer = Number(tot*((carb/nitro)-30));
     bot = post.carbon/post.nitrogen;
     voltwo = (numer/(30-bot))/post.nitrogen;
@@ -178,7 +193,7 @@ app.controller('GridController', [
         post.vol = null;
         $scope.chosen.push(post);
         $scope.totalWeight += post.weight;
-        $scope.totalVol += post.vol;
+        $scope.total.vol += post.vol;
         return true;
       }
     } else {
@@ -207,32 +222,33 @@ app.controller('GridController', [
         totalCarbon += Number($scope.chosen[i]['carbon'])*vol;
     };
     $scope.handleFinalRatio(Math.round(totalCarbon/totalNitrogen));
-    document.getElementById("totalCarbon").innerHTML = totalCarbon;
-    document.getElementById("totalNitrogen").innerHTML = totalNitrogen;
-    document.getElementById("totalVol").innerHTML = total;
+    $scope.total.finalRatio = (Math.round(totalCarbon/totalNitrogen));
+    $scope.total.carbon = totalCarbon;
+    $scope.total.nitrogen = totalNitrogen;
+    $scope.total.vol = total;
   };
 
 
   $scope.handleFinalRatio = function(finalRatio) {
     if (finalRatio < 25) {
-        document.getElementById("suggestion").innerHTML = "carbon rich";
+        $scope.total.suggestion = "carbon rich";
         $scope.swapBorder('suggestNitrogen','suggestCarbon');
     } else if (finalRatio < 30) {
-        document.getElementById("suggestion").innerHTML = "just a little carbon rich";
+        $scope.total.suggestion = "just a little carbon rich";
         $scope.swapBorder('suggestNitrogen','suggestCarbon');
     } else if (finalRatio > 35) {
-        document.getElementById("suggestion").innerHTML = "nitrogen rich";
+        $scope.total.suggestion = "nitrogen rich";
         $scope.swapBorder('suggestCarbon','suggestNitrogen');
     } else if (finalRatio > 30) {
-        document.getElementById("suggestion").innerHTML = "just a little nitrogen rich";
+        $scope.total.suggestion = "just a little nitrogen rich";
         $scope.swapBorder('suggestCarbon','suggestNitrogen');
     } else if (finalRatio === 30) {
-        document.getElementById("suggestion").innerHTML = "no more";
+        $scope.total.suggestion = "no more";
     } else if (isNaN(finalRatio)) {
-        document.getElementById("suggestion").innerHTML = 0;
+        $scope.total.suggestion = 0;
         finalRatio = 1;
     } else {
-        document.getElementById("suggestion").innerHTML = "AHH there's a bug!!";
+        $scope.total.suggestion = "AHH there's a bug!!";
     }
 
     document.getElementById("ratio").innerHTML = finalRatio;
